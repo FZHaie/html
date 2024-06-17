@@ -1,57 +1,91 @@
 <!DOCTYPE html>
-<html lang="zh-tw">
+<html lang="en">
   <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>fhnmgawnjwz</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>for_word</title>
+  </head>
   <style>
+    html,
     body {
-      margin: 0;
+      padding: 0;
+      margin: auto;
+    }
+    .main {
+      padding: 20px;
+      text-align: center;
+    }
+    .audio-box {
+      margin-top: 20px;
     }
   </style>
   <body>
-    <div
-      style="
-        background-color: blanchedalmond;
-        text-align: center;
-        padding: 40px;
-      "
-    >
-      <img
-        src="https://col.orygmqnhguiy.lmayhub.me/photos/vqBdD"
-        alt="2"
-        width="80px"
-        height="90px"
-      />
+    <div class="main">
+      <h5>循环播放单词 - 有道英式发言</h5>
+      <div>
+        单词:
+        <input
+          type="text"
+          name="word"
+          value="condition"
+          placeholder="请输入单词"
+        />
+      </div>
+      <div>
+        播放间隔 秒数:<input
+          type="text"
+          name="time_s"
+          value="5"
+          placeholder="秒数"
+        />
+      </div>
+
+      <button id="toggle" play="0">播放</button>
+      <div class="audio-box">
+        <audio controls id="audio">
+          <source
+            id="source"
+            src="https://dict.youdao.com/dictvoice?type=1&audio=word"
+          />
+        </audio>
+      </div>
     </div>
-    <div
-      style="
-        max-width: 700px;
-        margin: 30px auto;
-        padding: 15px;
-        line-height: 1.7;
-        color: rgba(145, 107, 69, 0.85);
-      "
-    >
-      <p>请问各位朋友，我用u撤回后，我怎么才能撤回我的撤回呢？</p>
-      <p>我从没打算守诺言，因此我从来不介意给出任何承诺。</p>
-      <p>
-        卧槽 scode，Ctrl+Shift+P，输入configure
-        language就会出现自带的语言设置选项了 ----这个可以
-      </p>
-      <p>一二三四五六七八九十</p>
-      <p>我的網站</p>
-    </div>
-    <div
-      style="
-        background-color: rgb(110, 127, 72);
-        text-align: center;
-        padding: 40px;
-        font-size: 12px;
-      "
-    >
-      <p>我的網站</p>
-      <a href="https://kakckm.yagw.i.uhigang.com/">友情链接</a>
-    </div>
+
+    <script>
+      let source_element = document.getElementById("source");
+      let toggle_element = document.getElementById("toggle");
+      let audio = document.getElementById("audio");
+      let word_element = document.querySelector("[name='word']");
+      let time_element = document.querySelector("[name='time_s']");
+      let url = "https://dict.youdao.com/dictvoice?type=1&audio=#{audio}";
+      let setTimeoutIndex = null;
+      toggle_element.onclick = function () {
+        let word = word_element.value;
+        if (!word) {
+          alert("单词不可为空！！！");
+          return;
+        }
+        let time = time_element.value;
+
+        let play = !Number(this.getAttribute("play"));
+        this.setAttribute("play", Number(play));
+        this.innerText = play ? "播发中" : "点击播放";
+        if (play) {
+          source_element.setAttribute("src", url.replace("#{audio}", word));
+          audio.load();
+          audio.play();
+          setTimeoutIndex = setInterval(function () {
+            audio.play();
+          }, time * 1000);
+        } else {
+          clearInterval(setTimeoutIndex);
+          audio.pause();
+        }
+      };
+    </script>
   </body>
 </html>
