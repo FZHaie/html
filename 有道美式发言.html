@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
+    <title>for_word</title>
+    <style>
+      body {
+        padding: 0;
+        margin: auto;
+      }
+      .main {
+        padding: 20px;
+        text-align: center;
+      }
+      .audio-box {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <p>循环播放单词 - 有道美式发言</p>
+
+      <div>
+        单词:
+        <input
+          autofocus
+          type="text"
+          name="word"
+          value="sharp"
+          placeholder="请输入单词" />
+      </div>
+
+      <button
+        style="width: 80px; height: 40px"
+        id="toggle"
+        play="0">
+        播放
+      </button>
+
+      <div>
+        播放间隔 秒数:<input
+          type="text"
+          name="time_s"
+          value="3"
+          placeholder="秒数" />
+      </div>
+
+      <div class="audio-box">
+        <audio
+          controls
+          id="audio">
+          <source
+            id="source"
+            src="https://dict.youdao.com/dictvoice?type?selected=1&audio=word" />
+          <!-- 有道美式发言 -->
+        </audio>
+      </div>
+
+      <div>
+        <a href="有道英式发言.html">有道英式发言</a>
+      </div>
+      <p></p>
+    </div>
+
+    <script>
+      let source_element = document.getElementById("source");
+      let toggle_element = document.getElementById("toggle");
+      let audio = document.getElementById("audio");
+      let word_element = document.querySelector("[name='word']");
+      let time_element = document.querySelector("[name='time_s']");
+      let url =
+        "https://dict.youdao.com/dictvoice?type?selected=1&audio=#{audio}";
+      let setTimeoutIndex = null;
+      toggle_element.onclick = function () {
+        let word = word_element.value;
+        if (!word) {
+          alert("单词不可为空！！！");
+          return;
+        }
+        let time = time_element.value;
+
+        let play = !Number(this.getAttribute("play"));
+        this.setAttribute("play", Number(play));
+        this.innerText = play ? "播发中" : "点击播放";
+        if (play) {
+          source_element.setAttribute("src", url.replace("#{audio}", word));
+          audio.load();
+          audio.play();
+          setTimeoutIndex = setInterval(function () {
+            audio.play();
+          }, time * 1000);
+        } else {
+          clearInterval(setTimeoutIndex);
+          audio.pause();
+        }
+      };
+    </script>
+  </body>
+</html>
